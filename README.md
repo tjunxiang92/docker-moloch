@@ -1,30 +1,18 @@
-# k0st/moloch
+# mathieM/docker-moloch
 
 Docker Moloch container
 
-Image is based on the [debian](https://registry.hub.docker.com/u/debian/) base image
+Image is based on the [ubuntu](https://registry.hub.docker.com/u/ubuntu/) base image
 
-## Docker image size
+Use it with elastic search whithout security (x-pack)
 
-[![Latest](https://badge.imagelayers.io/k0st/moloch.svg)](https://imagelayers.io/?images=k0st/moloch:latest 'latest')
+## Env vars available
 
-## Docker image usage
-
-```
-docker run k0st/moloch [capture]
-```
-
-## Examples
-
-Run capture on docker container eth0 interface:
-
-```
-docker run k0st/moloch capture
-```
-
-Run viewer and import pcap to analyze:
-
-```
-docker run -v /path/to/host/pcap:/data/pcap:rw k0st/moloch
-docker exec containerid /data/moloch/bin/moloch-capture -r /data/pcap/sniff.pcap -t mysniff
-```
+| NAME              | DEFAULT VALUE   |  NOTES                                                                   |
+| --------------    | --------------- | ---------------------------------------------------------------------    |
+| MOLOCH_VERSION    | 0.50.0-1_amd64  | According https://molo.ch/#downloads                                     |
+| UBUNTU_VERSION    | 16.04           | Like version of ubuntu base container                                    |
+| ES_HOST           | elasticsearch   | If you us docker-compose, you should name your service  `elasticsearch`  |
+| ES_PORT           | 9200            | Elastic search port in elastic search container or exposed in any server |
+| MOLOCH_PASSWORD   | admin           | To connect admin use on the web interface                                |
+| MOLOCH_INTERFACE  | eth0            | Network interface to listen                                              |
