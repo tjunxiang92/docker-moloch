@@ -17,10 +17,10 @@ else
 fi
 
 # Launch capture
-nohup exec $MOLOCHDIR/bin/moloch-capture 2>&1 | tee  $MOLOCHDIR/logs/capture.log
+nohup $MOLOCHDIR/bin/moloch-capture > $MOLOCHDIR/logs/capture.log
 
 # Launch viewer
-nohup exec $MOLOCHDIR/bin/node $MOLOCHDIR/viewer/viewer.js -c $MOLOCHDIR/etc/config.ini 2>&1 | tee $MOLOCHDIR/logs/viewer.log
+nohup $MOLOCHDIR/bin/node $MOLOCHDIR/viewer/viewer.js -c $MOLOCHDIR/etc/config.ini > $MOLOCHDIR/logs/viewer.log
 
 echo "Look at log files for errors"
 echo "  /data/moloch/logs/viewer.log"
