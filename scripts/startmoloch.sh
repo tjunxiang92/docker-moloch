@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "Giving ES time to start..."
-sleep 5
+sleep 15
 until curl -sS "http://$ES_HOST:$ES_PORT/_cluster/health?wait_for_status=yellow"
 do
     echo "Waiting for ES to start"
