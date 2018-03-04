@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "Giving ES time to start..."
-sleep 15
+sleep 30
 until curl -sS "http://$ES_HOST:$ES_PORT/_cluster/health?wait_for_status=yellow"
 do
     echo "Waiting for ES to start"
@@ -10,17 +10,17 @@ done
 echo
 
 if [ ! -f /data/initialized ]; then
+    /data/moloch/bin/Configure
 	/data/moloch/db/db.pl http://$ES_HOST:$ES_PORT init
 	/data/moloch/bin/moloch_add_user.sh admin "Admin User" $MOLOCH_ADMIN_PASSWORD --admin
-else
 	touch /data/initialized
 fi
 
-# Launch capture
-nohup $MOLOCHDIR/bin/moloch-capture > $MOLOCHDIR/logs/capture.log
+echo "Launch capture..."
+exec $MOLOCHDIR/bin/moloch-capture >> $MOLOCHDIR/logs/capture.log 2>&1 &
 
-# Launch viewer
-nohup $MOLOCHDIR/bin/node $MOLOCHDIR/viewer/viewer.js -c $MOLOCHDIR/etc/config.ini > $MOLOCHDIR/logs/viewer.log
+echo "Launch viewer..."
+exec $MOLOCHDIR/bin/node $MOLOCHDIR/viewer/viewer.js -c $MOLOCHDIR/etc/config.ini >> $MOLOCHDIR/logs/viewer.log 2>&1
 
 echo "Look at log files for errors"
 echo "  /data/moloch/logs/viewer.log"

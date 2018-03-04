@@ -27,12 +27,13 @@ ENV MOLOCH_PASSWORD $MOLOCH_PASSWORD
 ENV MOLOCH_ADMIN_PASSWORD $MOLOCH_PASSWORD
 ENV MOLOCHDIR "/data/moloch"
 
+RUN mkdir -p /data
+RUN cd /data && curl -C - -O "https://files.molo.ch/builds/ubuntu-"$UBUNTU_VERSION"/moloch_"$MOLOCH_VERSION".deb"
+RUN cd /data && dpkg -i "moloch_"$MOLOCH_VERSION".deb"
+
 # add scripts
 ADD /scripts /data/
 RUN chmod 755 /data/startmoloch.sh
-RUN cd /data && curl -C - -O "https://files.molo.ch/builds/ubuntu-"$UBUNTU_VERSION"/moloch_"$MOLOCH_VERSION".deb"
-RUN cd /data && dpkg -i "moloch_"$MOLOCH_VERSION".deb"
-RUN /data/moloch/bin/Configure
 
 VOLUME ["/data/pcap"]
 EXPOSE 8005
