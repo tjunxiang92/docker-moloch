@@ -10,17 +10,30 @@ done
 echo
 
 if [ ! -f /data/initialized ]; then
+	touch /data/initialized
     /data/moloch/bin/Configure
 	/data/moloch/db/db.pl http://$ES_HOST:$ES_PORT init
 	/data/moloch/bin/moloch_add_user.sh admin "Admin User" $MOLOCH_ADMIN_PASSWORD --admin
-	touch /data/initialized
 fi
 
-echo "Launch capture..."
-exec $MOLOCHDIR/bin/moloch-capture >> $MOLOCHDIR/logs/capture.log 2>&1 &
+if [ "$CAPTURE" = "on" ]
+then
+    echo "Launch capture..."
+    if [ "$VIEWER" = "on" ]
+    then
+        # Background execution
+        exec $MOLOCHDIR/bin/moloch-capture >> $MOLOCHDIR/logs/capture.log 2>&1 &
+    else
+        # If only capture, foreground execution
+        exec $MOLOCHDIR/bin/moloch-capture >> $MOLOCHDIR/logs/capture.log 2>&1
+    fi
+fi
 
-echo "Launch viewer..."
-exec $MOLOCHDIR/bin/node $MOLOCHDIR/viewer/viewer.js -c $MOLOCHDIR/etc/config.ini >> $MOLOCHDIR/logs/viewer.log 2>&1
+if [ "$VIEWER" = "on" ]
+then
+    echo "Launch viewer..."
+    exec $MOLOCHDIR/bin/node $MOLOCHDIR/viewer/viewer.js -c $MOLOCHDIR/etc/config.ini >> $MOLOCHDIR/logs/viewer.log 2>&1
+fi
 
 echo "Look at log files for errors"
 echo "  /data/moloch/logs/viewer.log"
