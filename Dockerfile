@@ -35,7 +35,7 @@ RUN cd /data && dpkg -i "moloch_"$MOLOCH_VERSION".deb"
 ADD /scripts /data/
 RUN chmod 755 /data/startmoloch.sh
 
-VOLUME ["/data/pcap"]
+VOLUME ["/data/pcap", "/data/moloch/logs"]
 EXPOSE 8005
 WORKDIR /data/moloch
 
