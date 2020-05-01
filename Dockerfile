@@ -1,5 +1,5 @@
-FROM ubuntu:16.04
-MAINTAINER Mathieu Monin - https://github.com/mathiem
+FROM ubuntu:18.04
+MAINTAINER Jun Xiang - https://github.com/tjunxiang92
 
 RUN apt-get -qq update && \
 apt-get -yq install software-properties-common && \
@@ -9,8 +9,8 @@ apt-get install -yq  wget curl libpcre3-dev uuid-dev libmagic-dev pkg-config g++
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Declare args
-ARG MOLOCH_VERSION=0.50.0-1_amd64
-ARG UBUNTU_VERSION=16.04
+ARG MOLOCH_VERSION=2.2.3-1_amd64
+ARG UBUNTU_VERSION=18.04
 ARG ES_HOST=elasticsearch
 ARG ES_PORT=9200
 ARG MOLOCH_PASSWORD=admin
@@ -31,7 +31,7 @@ ENV CAPTURE $CAPTURE
 ENV VIEWER $VIEWER
 
 RUN mkdir -p /data
-RUN cd /data && curl -C - -O "https://files.molo.ch/builds/ubuntu-"$UBUNTU_VERSION"/moloch_"$MOLOCH_VERSION".deb"
+RUN cd /data && curl -C - -O "https://s3.amazonaws.com/files.molo.ch/builds/ubuntu-"$UBUNTU_VERSION"/moloch_"$MOLOCH_VERSION".deb"
 RUN cd /data && dpkg -i "moloch_"$MOLOCH_VERSION".deb"
 
 # add scripts
